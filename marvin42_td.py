@@ -1,15 +1,6 @@
 #!/usr/bin/python3
 
-import argparse
-import configparser
-import atexit
-import errno
-import datetime
-import os
-import signal
-import sys
-import time
-import pwd
+import sys, time, argparse, configparser, signal
 
 from pathtools import *
 from daemon import Daemon
