@@ -1,0 +1,10 @@
+[daemon]
+user = marvin42
+pid_file = /tmp/marvin42_td.pid
+log_default = /var/log/marvin42/marvin42_td-default.log
+log_error = /var/log/marvin42/marvin42_td-error.log
+
+[server]
+bind_address = 10.42.0.3
+bind_port = 1042
+max_connections = 5
