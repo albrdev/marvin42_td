@@ -2,8 +2,8 @@
 
 import sys, time, argparse, configparser, signal
 
-from pathtools import *
-from daemon import Daemon
+from modules.pathtools import *
+from modules.daemon import Daemon
 from .receiver import Receiver
 
 class marvin42_td(Daemon):

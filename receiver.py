@@ -1,5 +1,6 @@
-import sys, struct
-from networking import PacketReceiver, PacketHeader
+import sys, argparse, configparser, struct
+from modules.pathtools import *
+from modules.networking import PacketReceiver, PacketHeader
 
 try:
     import motorctrl
@@ -44,7 +45,15 @@ class Receiver(PacketReceiver):
         print(data)
 
 if __name__ == '__main__':
-    server = Receiver((marvin42_config.SERVER_ADDRESS, marvin42_config.SERVER_PORT), marvin42_config.SERVER_MAX_CONNECTIONS)
+    args = argparse.ArgumentParser()
+
+    args.add_argument('-c', '--config', dest='config', action=FullPath, type=str, default=pathtools.fullpath('~/.marvin42rc'), help="Custom config file (optional)", metavar='filepath')
+    args = args.parse_args()
+
+    config = configparser.ConfigParser()
+    config.read(args.config)
+
+    server = Receiver((config['server']['bind_address'], int(config['server']['bind_port'])), int(config['server']['max_connections']))
     while True:
         try:
             server.poll()
