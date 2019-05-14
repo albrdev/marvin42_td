@@ -2,3 +2,7 @@
 	path = modules
 	url = git@github.com:albrdev/marvin42_modules.git
 	branch = master
+[submodule "motor_control"]
+	path = motor_control
+	url = git@github.com:kefena/marvin42.git
+	branch = master
