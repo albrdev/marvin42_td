@@ -3,7 +3,7 @@ from modules.pathtools import *
 from modules.networking import PacketReceiver, PacketHeader
 
 try:
-    import motorctrl
+    import motor_control.marvin42
 except:
     pass
 
