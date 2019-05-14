@@ -39,7 +39,7 @@ class Receiver(PacketReceiver):
 
     def on_motorspeed_received(self, data: PacketMotorSpeed):
         print(data)
-        marvin42.move_Tank(data.speed_left, data.speed_right)
+        motor_control.move_Tank(data.speed_left, data.speed_right)
 
     def on_motorsettings_received(self, data: PacketMotorSettings):
         print(data)
