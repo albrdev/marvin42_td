@@ -4,7 +4,7 @@ from modules.networking import PacketReceiver, PacketHeader
 
 try:
     import motor_control.marvin42
-except:
+except (SystemError, ImportError):
     pass
 
 import marvin42_types
