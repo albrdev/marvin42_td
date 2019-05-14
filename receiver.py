@@ -47,7 +47,7 @@ class Receiver(PacketReceiver):
 if __name__ == '__main__':
     args = argparse.ArgumentParser()
 
-    args.add_argument('-c', '--config', dest='config', action=FullPath, type=str, default=pathtools.fullpath('~/.marvin42rc'), help="Custom config file (optional)", metavar='filepath')
+    args.add_argument('-c', '--config', dest='config', action=FullPath, type=str, default=pathtools.fullpath('/etc/marvin42_tdrc'), help="Custom config file (optional)", metavar='filepath')
     args = args.parse_args()
 
     config = configparser.ConfigParser()
