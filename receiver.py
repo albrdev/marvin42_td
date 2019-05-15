@@ -27,6 +27,8 @@ class Receiver(PacketReceiver):
         if type == CommandID.MOTORSPEED:
             data = PacketMotorSpeed._make(struct.unpack(PacketMotorSpeed.FORMAT, data))
             self.on_motorspeed_received(data)
+        elif type == CommandID.MOTORSTOP:
+            self.on_motorstop_received()
         elif type == CommandID.MOTORSETTINGS:
             data = PacketMotorSettings._make(struct.unpack(PacketMotorSettings.FORMAT, data))
             self.on_motorsettings_received(data)
@@ -38,6 +40,9 @@ class Receiver(PacketReceiver):
     def on_motorspeed_received(self, data: PacketMotorSpeed):
         print(data)
         motor_control.move_Tank(data.speed_left, data.speed_right)
+
+    def on_motorspeed_received(self):
+        motor_control.stop_tank()
 
     def on_motorsettings_received(self, data: PacketMotorSettings):
         print(data)
