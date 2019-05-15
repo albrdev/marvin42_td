@@ -62,5 +62,5 @@ if __name__ == '__main__':
             server.poll()
         except KeyboardInterrupt:
             break
-
-sys.exit(0)
+        
+    sys.exit(0)
