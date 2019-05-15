@@ -1,14 +1,12 @@
 import sys, argparse, configparser, struct
 from modules.pathtools import *
 from modules.networking import PacketReceiver, PacketHeader
+from modules.marvin42 import *
 
 try:
     import motor_control
 except (SystemError, ImportError):
     pass
-
-import marvin42_types
-from marvin42_types import *
 
 class Receiver(PacketReceiver):
     def on_client_connected(self, host: tuple):
