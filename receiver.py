@@ -41,7 +41,7 @@ class Receiver(PacketReceiver):
         print(data)
         motor_control.move_Tank(data.speed_left, data.speed_right)
 
-    def on_motorspeed_received(self):
+    def on_motorstop_received(self):
         motor_control.stop_tank()
 
     def on_motorsettings_received(self, data: PacketMotorSettings):
