@@ -9,6 +9,12 @@ except (SystemError, ImportError):
     pass
 
 class Receiver(PacketReceiver):
+    __slots__ = ['cmd_proc']
+
+    def __init__(self, host: tuple, max_connections: int = 10):
+        super(Receiver, self).__init__(host, max_connections)
+        self.cmd_proc = None
+
     def run_command(self, op, *args):
         cmdlist = ["python3 ./motor_control/marvin42.py", op]
         cmdlist.extend(list(map(str, args)))
