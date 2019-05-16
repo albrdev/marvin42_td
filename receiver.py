@@ -29,9 +29,9 @@ class Receiver(PacketReceiver):
 
         print("Server: Attempt to execute command: {cmd}".format(cmd=cmdlist))
         self.cmd_proc = subprocess.Popen(cmdlist)
-        (output_stdout, output_stderr) = self.cmd_proc.communicate()
-        if self.cmd_proc.returncode is not None:
-            if self.cmd_proc.returncode != 0:
+        ret = self.cmd_proc.poll()
+        if ret is not None:
+            if ret != 0:
                 print("Server: Command failed: {cmd} ({pid})".format(cmd=cmdlist, pid=self.cmd_proc.pid))
                 return False
             else:
