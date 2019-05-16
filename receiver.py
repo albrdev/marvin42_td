@@ -20,13 +20,14 @@ class Receiver(PacketReceiver):
         cmdlist = ["python3", "{p}/marvin42.py".format(p=self.cmd_path), op]
         cmdlist.extend(list(map(str, args)))
 
-        print("Server: Attempt to execute command {cmd}".format(cmd=cmdlist))
+        print("Server: Command: {cmd}".format(cmd=cmdlist))
         if self.cmd_proc is not None:
             if self.cmd_proc.poll() is None:
                 self.cmd_proc.terminate()
                 print("Server: Waiting for current command to terminate: {pid}".format(pid=self.cmd_proc.pid))
                 self.cmd_proc.wait()
 
+        print("Server: Attempt to execute command: {cmd}".format(cmd=cmdlist))
         self.cmd_proc = subprocess.Popen(cmdlist)
         (output_stdout, output_stderr) = self.cmd_proc.communicate()
         if self.cmd_proc.returncode is not None:
