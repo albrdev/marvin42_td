@@ -17,7 +17,7 @@ class Receiver(PacketReceiver):
         self.cmd_path = "{p}/motor_control".format(p=os.path.dirname(os.path.realpath(__file__)))
 
     def run_command(self, op, *args):
-        cmdlist = ["python3 {p}/marvin42.py".format(p=self.cmd_path), op]
+        cmdlist = ["python3", "{p}/marvin42.py".format(p=self.cmd_path), op]
         cmdlist.extend(list(map(str, args)))
 
         print("Server: Attempt to execute command {cmd}".format(cmd=cmdlist))
