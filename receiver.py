@@ -9,38 +9,6 @@ except (SystemError, ImportError):
     pass
 
 class Receiver(PacketReceiver):
-    __slots__ = ['cmd_proc', 'cmd_path']
-
-    def __init__(self, host: tuple, max_connections: int = 10):
-        super(Receiver, self).__init__(host, max_connections)
-        self.cmd_proc = None
-        self.cmd_path = "{p}/motor_control".format(p=os.path.dirname(os.path.realpath(__file__)))
-
-    def run_command(self, op, *args):
-        cmdlist = ["python3", "{p}/marvin42.py".format(p=self.cmd_path), op]
-        cmdlist.extend(list(map(str, args)))
-
-        print("Server: Command: {cmd}".format(cmd=cmdlist))
-        if self.cmd_proc is not None:
-            if self.cmd_proc.poll() is None:
-                self.cmd_proc.terminate()
-                print("Server: Waiting for current command to terminate: {pid}".format(pid=self.cmd_proc.pid))
-                self.cmd_proc.wait()
-
-        print("Server: Attempt to execute command: {cmd}".format(cmd=cmdlist))
-        self.cmd_proc = subprocess.Popen(cmdlist)
-        ret = self.cmd_proc.poll()
-        if ret is not None:
-            if ret != 0:
-                print("Server: Command failed: {cmd} ({pid})".format(cmd=cmdlist, pid=self.cmd_proc.pid))
-                return False
-            else:
-                print("Server: Command succeded: {cmd} ({pid})".format(cmd=cmdlist, pid=self.cmd_proc.pid))
-                return True
-        else:
-            print("Server: Command running: {cmd} ({pid})".format(cmd=cmdlist, pid=self.cmd_proc.pid))
-            return True
-
     def on_client_connected(self, host: tuple):
         print("Server: Client connected: {h}".format(h=host))
 
@@ -71,12 +39,10 @@ class Receiver(PacketReceiver):
 
     def on_motorspeed_received(self, data: PacketMotorSpeed):
         print(data)
-        self.run_command('run', data.speed_left, data.speed_right)
-        #motor_control.move_Tank(data.speed_left, data.speed_right)
+        motor_control.move_Tank('run', data.speed_left, data.speed_right)
 
     def on_motorstop_received(self):
-        self.run_command('stop')
-        #motor_control.stop_tank()
+        motor_control.move_Tank('stop')
 
     def on_motorsettings_received(self, data: PacketMotorSettings):
         print(data)
