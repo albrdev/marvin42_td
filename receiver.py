@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys, os, argparse, configparser, struct, subprocess
 from modules.pathtools import *
 from modules.networking import PacketReceiver, PacketHeader
