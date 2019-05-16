@@ -1,4 +1,4 @@
-import sys, argparse, configparser, struct, subprocess
+import sys, os, argparse, configparser, struct, subprocess
 from modules.pathtools import *
 from modules.networking import PacketReceiver, PacketHeader
 from modules.marvin42 import *
@@ -9,14 +9,15 @@ except (SystemError, ImportError):
     pass
 
 class Receiver(PacketReceiver):
-    __slots__ = ['cmd_proc']
+    __slots__ = ['cmd_proc', 'cmd_path']
 
     def __init__(self, host: tuple, max_connections: int = 10):
         super(Receiver, self).__init__(host, max_connections)
         self.cmd_proc = None
+        self.cmd_path = "{p}/motor_control".format(p=os.path.dirname(os.path.realpath(__file__)))
 
     def run_command(self, op, *args):
-        cmdlist = ["python3 ./motor_control/marvin42.py", op]
+        cmdlist = ["python3 {p}/marvin42.py".format(p=self.cmd_path), op]
         cmdlist.extend(list(map(str, args)))
 
         print("Server: Attempt to execute command {cmd}".format(cmd=cmdlist))
