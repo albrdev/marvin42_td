@@ -1,4 +1,4 @@
-import sys, argparse, configparser, struct
+import sys, argparse, configparser, struct, subprocess
 from modules.pathtools import *
 from modules.networking import PacketReceiver, PacketHeader
 from modules.marvin42 import *
@@ -9,6 +9,30 @@ except (SystemError, ImportError):
     pass
 
 class Receiver(PacketReceiver):
+    def run_command(self, op, *args):
+        cmdlist = ["python3 ./motor_control/marvin42.py", op]
+        cmdlist.extend(list(map(str, args)))
+
+        print("Server: Attempt to execute command {cmd}".format(cmd=cmdlist))
+        if self.cmd_proc is not None:
+            if self.cmd_proc.poll() is None:
+                self.cmd_proc.terminate()
+                print("Server: Waiting for current command to terminate: {pid}".format(pid=self.cmd_proc.pid))
+                self.cmd_proc.wait()
+
+        self.cmd_proc = subprocess.Popen(cmdlist)
+        (output_stdout, output_stderr) = self.cmd_proc.communicate()
+        if self.cmd_proc.returncode is not None:
+            if self.cmd_proc.returncode != 0:
+                print("Server: Command failed: {cmd} ({pid})".format(cmd=cmdlist, pid=self.cmd_proc.pid))
+                return False
+            else:
+                print("Server: Command succeded: {cmd} ({pid})".format(cmd=cmdlist, pid=self.cmd_proc.pid))
+                return True
+        else:
+            print("Server: Command running: {cmd} ({pid})".format(cmd=cmdlist, pid=self.cmd_proc.pid))
+            return True
+
     def on_client_connected(self, host: tuple):
         print("Server: Client connected: {h}".format(h=host))
 
@@ -39,10 +63,12 @@ class Receiver(PacketReceiver):
 
     def on_motorspeed_received(self, data: PacketMotorSpeed):
         print(data)
-        motor_control.move_Tank(data.speed_left, data.speed_right)
+        self.run_command('run', data.speed_left, data.speed_right)
+        #motor_control.move_Tank(data.speed_left, data.speed_right)
 
     def on_motorstop_received(self):
-        motor_control.stop_tank()
+        self.run_command('stop')
+        #motor_control.stop_tank()
 
     def on_motorsettings_received(self, data: PacketMotorSettings):
         print(data)
