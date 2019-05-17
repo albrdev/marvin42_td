@@ -24,7 +24,7 @@ def send_packet_motorstop(host: tuple, timeout: float = 5):
 def monitor():
     while True:
         if irSensor.value() < config.get('motor', 'autostop_threshold', fallback=50):
-            send_packet_motorstop(('127.0.0.1', 1042))
+            send_packet_motorstop((config['server']['bind_address'], int(config['server']['bind_port'])))
 
         time.sleep(0.25)
 
