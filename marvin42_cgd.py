@@ -49,7 +49,7 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read(args.config)
 
-    signal.signal(signal.SIGHUP, self.handle_signals)
+    signal.signal(signal.SIGHUP, signal_handler)
 
     try:
         moinitor()
