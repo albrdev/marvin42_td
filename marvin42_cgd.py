@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
-import sys, os, time, argparse, configparser, signal, socket, struct
-from chirpsdk import ChirpConnect, CallbackSet
+import sys, time, argparse, configparser, signal, socket, struct
 from ev3dev2.motor import OUTPUT_A, OUTPUT_B, MoveTank
 from ev3dev2.sensor.lego import InfraredSensor
 
 from modules.pathtools import *
+from modules.daemon import Daemon
 from modules.networking import PacketHeader
 from modules.marvin42 import *
 
