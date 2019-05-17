@@ -12,10 +12,11 @@ class marvin42_td(Daemon):
 
         self.server = Receiver((config['server']['bind_address'], int(config['server']['bind_port'])), int(config['server']['max_connections']))
 
-    def handle_signals(self, num, frame):
+    def signal_handler(self, num, frame):
         {
             signal.SIGINT: lambda: sys.exit(0), 
-            signal.SIGTERM: lambda: sys.exit(0)
+            signal.SIGTERM: lambda: sys.exit(0),
+            signal.SIGHUP: lambda: self.restart(),
         }.get(num, lambda *args: None)()
 
     def run(self):

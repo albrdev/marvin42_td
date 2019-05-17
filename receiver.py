@@ -26,14 +26,14 @@ class Receiver(PacketReceiver):
             print("Server: Invalid packet type: {t}".format(t=type), file=sys.stderr)
             return False
 
-        if type == CommandID.MOTORSPEED:
+        if type == CommandID.MOTORSETTINGS:
+            data = PacketMotorSettings._make(struct.unpack(PacketMotorSettings.FORMAT, data))
+            self.on_motorsettings_received(data)
+        elif type == CommandID.MOTORSPEED:
             data = PacketMotorSpeed._make(struct.unpack(PacketMotorSpeed.FORMAT, data))
             self.on_motorspeed_received(data)
         elif type == CommandID.MOTORSTOP:
             self.on_motorstop_received()
-        elif type == CommandID.MOTORSETTINGS:
-            data = PacketMotorSettings._make(struct.unpack(PacketMotorSettings.FORMAT, data))
-            self.on_motorsettings_received(data)
         else:
             print("Server: Command ID not implemented: {t}".format(t=type), file=sys.stderr)
 
