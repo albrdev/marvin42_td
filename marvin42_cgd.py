@@ -18,8 +18,6 @@ def send_packet_motorstop(host: tuple, timeout: float = 5):
 
     s.connect(host)
     s.send(header)
-    if data is not None:
-        s.send(data)
 
 def monitor():
     while True:
