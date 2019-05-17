@@ -52,7 +52,7 @@ if __name__ == '__main__':
     signal.signal(signal.SIGHUP, signal_handler)
 
     try:
-        moinitor()
+        monitor()
     except KeyboardInterrupt:
         pass
 
