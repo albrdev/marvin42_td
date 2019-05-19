@@ -4,7 +4,7 @@ import sys, time, argparse, configparser, signal
 
 from modules.pathtools import *
 from modules.daemon import Daemon
-from .receiver import Receiver
+from receiver import Receiver
 
 class marvin42_td(Daemon):
     __slots__ = ['server']
