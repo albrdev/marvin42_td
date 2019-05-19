@@ -47,7 +47,7 @@ class Receiver(PacketReceiver):
         motor_control.stop_tank()
 
     def on_motorsettings_received(self, data: PacketMotorSettings):
-        print(data)
+        raise NotImplementedError(str(data))
 
 if __name__ == '__main__':
     args = argparse.ArgumentParser()
