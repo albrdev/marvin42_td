@@ -1,0 +1,13 @@
+[daemon]
+user = marvin42
+pid_file = /tmp/marvin42_cgd.pid
+log_default = /var/log/marvin42/marvin42_cgd-default.log
+log_error = /var/log/marvin42/marvin42_cgd-error.log
+
+[remote]
+bind_address = 10.42.0.3
+bind_port = 1042
+
+[motor]
+speed_max = 100
+autostop_threshold = 50
