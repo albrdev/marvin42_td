@@ -4,11 +4,7 @@ import sys, os, argparse, configparser, struct, subprocess
 from modules.pathtools import *
 from modules.networking import PacketReceiver, PacketHeader
 from modules.marvin42 import *
-
-try:
-    import motor_control
-except (SystemError, ImportError):
-    pass
+import motor_control
 
 class Receiver(PacketReceiver):
     def on_client_connected(self, host: tuple):
