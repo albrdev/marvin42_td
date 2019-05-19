@@ -7,6 +7,8 @@ from modules.daemon import Daemon
 from .receiver import Receiver
 
 class marvin42_td(Daemon):
+    __slots__ = ['server']
+
     def __init__(self, args, config):
         super().__init__(config['daemon']['user'], config['daemon']['pid_file'], config['daemon']['log_default'], config['daemon']['log_error'])
 
@@ -16,7 +18,7 @@ class marvin42_td(Daemon):
         {
             signal.SIGINT: lambda: sys.exit(0), 
             signal.SIGTERM: lambda: sys.exit(0),
-            signal.SIGHUP: lambda: self.restart(),
+            signal.SIGHUP: lambda: self.restart()
         }.get(num, lambda *args: None)()
 
     def run(self):
