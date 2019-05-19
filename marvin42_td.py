@@ -9,8 +9,8 @@ from receiver import Receiver
 class marvin42_td(Daemon):
     __slots__ = ['server']
 
-    def __init__(self, args, config):
-        super().__init__(config['daemon']['user'], config['daemon']['pid_file'], config['daemon']['log_default'], config['daemon']['log_error'])
+    def init(self):
+        super(marvin42_td, self).init()
 
         self.server = Receiver((config['server']['bind_address'], int(config['server']['bind_port'])), int(config['server']['max_connections']))
 
@@ -26,6 +26,8 @@ class marvin42_td(Daemon):
         time.sleep(0.1)
 
 if __name__ == '__main__':
+    global config
+
     if len(sys.argv) < 2:
         print ("Usage: {app} start|stop|restart".format(app=sys.argv[0]))
         sys.exit(1)
@@ -42,7 +44,7 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read(args.config)
 
-    daemon = marvin42_td(args, config)
+    daemon = marvin42_td(config['daemon']['user'], config['daemon']['pid_file'], config['daemon']['log_default'], config['daemon']['log_error'])
     if args.operation == 'start':
         daemon.start()
     elif args.operation == 'stop':
