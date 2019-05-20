@@ -15,7 +15,7 @@ class marvin42_cgd(Daemon):
         self.HEADER_MOTORSTOP = struct.pack(PacketHeader.FORMAT, int(CommandID.MOTORSTOP), 0)
         self.config = config
 
-        super(marvin42_cgd, self).__init__(main_config['daemon']['user'], main_config['daemon']['pid_file'], main_config['daemon']['log_default'], main_config['daemon']['log_error'])
+        super(marvin42_cgd, self).__init__(config['daemon']['user'], config['daemon']['pid_file'], config['daemon']['log_default'], config['daemon']['log_error'])
 
         
         self.ir_sensor = InfraredSensor()
