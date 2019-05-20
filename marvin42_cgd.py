@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys, time, argparse, configparser, signal, socket, struct
+from typing import TypeVar
 from ev3dev2.sensor.lego import InfraredSensor
 
 from modules.pathtools import *
@@ -9,15 +10,12 @@ from modules.networking import PacketHeader
 from modules.marvin42 import *
 
 class marvin42_cgd(Daemon):
-    __slots__ = ['HEADER_MOTORSTOP', 'config', 'ir_sensor']
+    __slots__ = ['HEADER_MOTORSTOP', 'ir_sensor']
 
-    def __init__(self, args, config):
-        self.HEADER_MOTORSTOP = struct.pack(PacketHeader.FORMAT, int(CommandID.MOTORSTOP), 0)
-        self.config = config
-
+    def __init__(self):
         super(marvin42_cgd, self).__init__(config['daemon']['user'], config['daemon']['pid_file'], config['daemon']['log_default'], config['daemon']['log_error'])
 
-        
+        self.HEADER_MOTORSTOP = struct.pack(PacketHeader.FORMAT, int(CommandID.MOTORSTOP), 0)
         self.ir_sensor = InfraredSensor()
 
     def signal_handler(self, num, frame):
@@ -27,7 +25,8 @@ class marvin42_cgd(Daemon):
             signal.SIGHUP: lambda: self.restart()
         }.get(num, lambda *args: None)()
 
-    def send_packet_motorstop(host: tuple, timeout: float = 5):
+    AnyNum = TypeVar('AnyNum', int, float)
+    def send_packet_motorstop(self, host: tuple, timeout: AnyNum = 5):
         s = socket.socket()
         s.settimeout(timeout)
 
@@ -35,13 +34,13 @@ class marvin42_cgd(Daemon):
         s.send(self.HEADER_MOTORSTOP)
 
     def run(self):
-        if self.ir_sensor.value() < config.get('motor', 'autostop_threshold', fallback=50):
-            send_packet_motorstop((config['server']['bind_address'], int(config['server']['bind_port'])))
+        threshold = int(config.get('motor', 'autostop_threshold', fallback=50))
+        if self.ir_sensor.value() < threshold:
+            self.send_packet_motorstop((config['remote']['bind_address'], int(config['remote']['bind_port'])))
 
         time.sleep(0.25)
 
 if __name__ == '__main__':
-    global args
     global config
 
     args = argparse.ArgumentParser(
@@ -56,7 +55,7 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read(args.config)
 
-    daemon = marvin42_cgd(args, config)
+    daemon = marvin42_cgd()
     if args.operation == 'start':
         daemon.start()
     elif args.operation == 'stop':
