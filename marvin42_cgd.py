@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import sys, time, argparse, configparser, signal, socket, struct
+import sys, time, math, argparse, configparser, signal, socket, struct
 from typing import TypeVar
+from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B
 from ev3dev2.sensor.lego import InfraredSensor
 
 from modules.pathtools import *
@@ -9,14 +10,48 @@ from modules.daemon import Daemon
 from modules.networking import PacketHeader
 from modules.marvin42 import *
 
+class MotorPair(object):
+    __slots__ = ['motor_a', 'motor_b']
+
+    def __init__(self, output_a, output_b):
+        self.motor_a = LargeMotor(output_a)
+        self.motor_b = LargeMotor(output_b)
+
+    @property
+    def speed_a(self):
+        return self.motor_a.speed / self.motor_a.max_speed
+
+    @property
+    def speed_b(self):
+        return self.motor_b.speed / self.motor_b.max_speed
+        
+    @property
+    def speed(self):
+        return (self.speed_a + self.speed_b) / 2
+
+    @property
+    def speed_ms_a(self):
+        p = (2.25 * math.pi) / 100
+        dpc = p / self.motor_a.count_per_rot
+        return self.motor_a.speed / self.motor_a.count_per_m
+
+    @property
+    def speed_ms_b(self):
+        return self.motor_b.speed / self.motor_b.count_per_m
+
+    @property
+    def speed_ms(self):
+        return (self.speed_ms_a + self.speed_ms_b) / 2
+
 class marvin42_cgd(Daemon):
-    __slots__ = ['HEADER_MOTORSTOP', 'ir_sensor']
+    __slots__ = ['HEADER_MOTORSTOP', 'ir_sensor', 'motor_pair']
 
     def __init__(self):
         super(marvin42_cgd, self).__init__(config['daemon']['user'], config['daemon']['pid_file'], config['daemon']['log_default'], config['daemon']['log_error'])
 
         self.HEADER_MOTORSTOP = struct.pack(PacketHeader.FORMAT, int(CommandID.MOTORSTOP), 0)
         self.ir_sensor = InfraredSensor()
+        self.motor_pair = MotorPair(OUTPUT_A, OUTPUT_B)
 
     def signal_handler(self, num, frame):
         {
@@ -34,6 +69,8 @@ class marvin42_cgd(Daemon):
         s.send(self.HEADER_MOTORSTOP)
 
     def run(self):
+        print("Speed: {0}".format(self.motor_pair.speed))
+        #print("Speed: {0}, {1}".format(self.motor_pair.speed, self.motor_pair.speed_ms))
         threshold = int(config.get('motor', 'autostop_threshold', fallback=50))
         if self.ir_sensor.value() < threshold:
             self.send_packet_motorstop((config['remote']['bind_address'], int(config['remote']['bind_port'])))
