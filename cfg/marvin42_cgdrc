@@ -10,5 +10,5 @@ bind_port = 1042
 
 [motor]
 speed_max = 100
-autostop_threshold_front = 50
-autostop_threshold_back = 25
+autostop_threshold_front = 25
+autostop_threshold_back = 15
