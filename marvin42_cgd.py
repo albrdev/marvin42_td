@@ -72,8 +72,6 @@ class marvin42_cgd(Daemon):
 
     def run(self):
         threshold_front = float(config.get('motor', 'autostop_threshold_front', fallback=25.0))
-        threshold_back = float(config.get('motor', 'autostop_threshold_back', fallback=15.0))
-
         if threshold_front > 0 and self.ir_sensor_front is not None:
             distance = (self.ir_sensor_front.proximity / 100) * self.IR_SENSOR_MAXRANGE_CM
             if distance <= threshold_front and self.motor_pair.speed > 0:
@@ -81,6 +79,7 @@ class marvin42_cgd(Daemon):
                 self.send_packet_motorstop((config['remote']['bind_address'], int(config['remote']['bind_port'])))
                 return
 
+        threshold_back = float(config.get('motor', 'autostop_threshold_back', fallback=15.0))
         if threshold_back > 0 and self.ir_sensor_back is not None:
             distance = (self.ir_sensor_back.proximity / 100) * self.IR_SENSOR_MAXRANGE_CM
             if distance <= threshold_back and self.motor_pair.speed < 0:
