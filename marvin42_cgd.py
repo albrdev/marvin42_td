@@ -30,14 +30,20 @@ class MotorPair(object):
         return (self.speed_a + self.speed_b) / 2
 
     @property
-    def speed_ms_a(self):
+    def blaval(self, motor) -> float:
         p = (2.25 * math.pi) / 100
-        dpc = p / self.motor_a.count_per_rot
-        return self.motor_a.speed / self.motor_a.count_per_m
+        revs_per_meter = 1 / p
+        return revs.per_meter * self.motor.count_per_rot
+
+    @property
+    def speed_ms_a(self):
+        count_per_meter = self.blaval(motor_a)
+        return self.motor_a.speed / count_per_meter
 
     @property
     def speed_ms_b(self):
-        return self.motor_b.speed / self.motor_b.count_per_m
+        count_per_meter = self.blaval(motor_b)
+        return self.motor_b.speed / count_per_meter
 
     @property
     def speed_ms(self):
@@ -69,10 +75,11 @@ class marvin42_cgd(Daemon):
         s.send(self.HEADER_MOTORSTOP)
 
     def run(self):
-        print("Speed: {0}".format(self.motor_pair.speed))
-        #print("Speed: {0}, {1}".format(self.motor_pair.speed, self.motor_pair.speed_ms))
+        print("Speed: {0}, {1}".format(self.motor_pair.speed, self.motor_pair.speed_ms))
         threshold = int(config.get('motor', 'autostop_threshold', fallback=50))
-        if self.ir_sensor.value() < threshold:
+        distance = self.ir_sensor.value()
+        if distance <= threshold:
+            print("Obstacle detected {d}cm ahead (Threshold: {t}). Sending stop command".format(d=distance, t=threshold))
             self.send_packet_motorstop((config['remote']['bind_address'], int(config['remote']['bind_port'])))
 
         time.sleep(0.25)
