@@ -80,6 +80,7 @@ class marvin42_cgd(Daemon):
                 print("Obstacle detected {d:0.2f}cm ahead (Threshold: {t}). Sending stop command".format(d=distance, t=threshold_front))
                 self.send_packet_motorstop((config['remote']['bind_address'], int(config['remote']['bind_port'])))
                 return
+
         if threshold_back > 0 and self.ir_sensor_back is not None:
             distance = (self.ir_sensor_back.proximity / 100) * self.IR_SENSOR_MAXRANGE_CM
             if distance <= threshold_back and self.motor_pair.speed < 0:
