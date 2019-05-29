@@ -30,8 +30,8 @@ install:
 
 	$(CMD_CP) --recursive --no-target-directory --force $(DIR_SRC)/$(MOD_NAME) $(DIR_BIN_INSTALL)/$(MOD_NAME)
 
-	$(CMD_CHMOD) u+x,g+x $(DIR_BIN_INSTALL)/$(TD_APP_NAME)
-	$(CMD_CHMOD) u+x,g+x $(DIR_BIN_INSTALL)/$(CGD_APP_NAME)
+	$(CMD_CHMOD) u+x,g+x,o+x $(DIR_BIN_INSTALL)/$(TD_APP_NAME)
+	$(CMD_CHMOD) u+x,g+x,o+x $(DIR_BIN_INSTALL)/$(CGD_APP_NAME)
 
 .PHONY: uninstall
 uninstall:
