@@ -29,12 +29,14 @@ install:
 	$(CMD_CP) --no-clobber $(DIR_CFG)/$(CGD_CFG_NAME) $(DIR_CFG_INSTALL)/$(CGD_CFG_NAME)
 
 	$(CMD_CP) --recursive --no-target-directory --force $(DIR_SRC)/$(MOD_NAME) $(DIR_BIN_INSTALL)/$(MOD_NAME)
+	$(CMD_CP) --recursive --no-target-directory --force $(DIR_SRC)/motor_control $(DIR_BIN_INSTALL)/motor_control
 
 	$(CMD_CHMOD) u+x,g+x,o+x $(DIR_BIN_INSTALL)/$(TD_APP_NAME)
 	$(CMD_CHMOD) u+x,g+x,o+x $(DIR_BIN_INSTALL)/$(CGD_APP_NAME)
 
 .PHONY: uninstall
 uninstall:
+	$(CMD_RM) --recursive --force $(DIR_BIN_INSTALL)/motor_control
 	$(CMD_RM) --recursive --force $(DIR_BIN_INSTALL)/$(MOD_NAME)
 	$(CMD_RM) --force $(DIR_BIN_INSTALL)/$(TD_APP_NAME)
 	$(CMD_RM) --force $(DIR_BIN_INSTALL)/$(CGD_APP_NAME)
