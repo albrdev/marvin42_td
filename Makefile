@@ -22,6 +22,7 @@ CMD_PRINT			:= @printf
 .PHONY: install
 install:
 	$(CMD_CP) --force $(DIR_SRC)/$(TD_SRC_NAME) $(DIR_BIN_INSTALL)/$(TD_APP_NAME)
+	$(CMD_CP) --force $(DIR_SRC)/receiver.py $(DIR_BIN_INSTALL)/receiver.py
 	$(CMD_CP) --no-clobber $(DIR_CFG)/$(TD_CFG_NAME) $(DIR_CFG_INSTALL)/$(TD_CFG_NAME)
 
 	$(CMD_CP) --force $(DIR_SRC)/$(CGD_SRC_NAME) $(DIR_BIN_INSTALL)/$(CGD_APP_NAME)
