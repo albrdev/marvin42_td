@@ -7,14 +7,22 @@ from modules.daemon import Daemon
 from receiver import Receiver
 
 class marvin42_td(Daemon):
+    """
+    marvin42 Transmission Daemon
+    Listens for incomming (motor) commands and executes them
+    """
     __slots__ = ['server']
 
     def init(self):
         super(marvin42_td, self).init()
 
+        # Using the Receiver class
         self.server = Receiver((config['server']['bind_address'], int(config['server']['bind_port'])), int(config['server']['max_connections']))
 
     def signal_handler(self, num, frame):
+        """
+        Signal handler
+        """
         {
             signal.SIGINT: lambda: sys.exit(0), 
             signal.SIGTERM: lambda: sys.exit(0),
@@ -22,6 +30,10 @@ class marvin42_td(Daemon):
         }.get(num, lambda *args: None)()
 
     def run(self):
+        """
+        Overriden daemon main loop
+        Lets the server check and handle connections and data
+        """
         self.server.poll()
         time.sleep(0.1)
 
