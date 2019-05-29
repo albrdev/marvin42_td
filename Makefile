@@ -21,24 +21,33 @@ CMD_PRINT			:= @printf
 
 .PHONY: install
 install:
+	# Main
 	$(CMD_CP) --force $(DIR_SRC)/$(TD_SRC_NAME) $(DIR_BIN_INSTALL)/$(TD_APP_NAME)
 	$(CMD_CP) --force $(DIR_SRC)/receiver.py $(DIR_BIN_INSTALL)/receiver.py
-	$(CMD_CP) --no-clobber $(DIR_CFG)/$(TD_CFG_NAME) $(DIR_CFG_INSTALL)/$(TD_CFG_NAME)
 
 	$(CMD_CP) --force $(DIR_SRC)/$(CGD_SRC_NAME) $(DIR_BIN_INSTALL)/$(CGD_APP_NAME)
-	$(CMD_CP) --no-clobber $(DIR_CFG)/$(CGD_CFG_NAME) $(DIR_CFG_INSTALL)/$(CGD_CFG_NAME)
 
+	# Modules
 	$(CMD_CP) --recursive --no-target-directory --force $(DIR_SRC)/$(MOD_NAME) $(DIR_BIN_INSTALL)/$(MOD_NAME)
 	$(CMD_CP) --recursive --no-target-directory --force $(DIR_SRC)/motor_control $(DIR_BIN_INSTALL)/motor_control
 
+	# Configs
+	$(CMD_CP) --no-clobber $(DIR_CFG)/$(TD_CFG_NAME) $(DIR_CFG_INSTALL)/$(TD_CFG_NAME)
+	$(CMD_CP) --no-clobber $(DIR_CFG)/$(CGD_CFG_NAME) $(DIR_CFG_INSTALL)/$(CGD_CFG_NAME)
+
+	# MISC
 	$(CMD_CHMOD) u+x,g+x,o+x $(DIR_BIN_INSTALL)/$(TD_APP_NAME)
 	$(CMD_CHMOD) u+x,g+x,o+x $(DIR_BIN_INSTALL)/$(CGD_APP_NAME)
 
 .PHONY: uninstall
 uninstall:
+	# Modules
 	$(CMD_RM) --recursive --force $(DIR_BIN_INSTALL)/motor_control
 	$(CMD_RM) --recursive --force $(DIR_BIN_INSTALL)/$(MOD_NAME)
+
+	# Main
 	$(CMD_RM) --force $(DIR_BIN_INSTALL)/$(CGD_APP_NAME)
+
 	$(CMD_RM) --force $(DIR_BIN_INSTALL)/receiver.py
 	$(CMD_RM) --force $(DIR_BIN_INSTALL)/$(TD_APP_NAME)
 
