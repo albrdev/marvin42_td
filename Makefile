@@ -38,8 +38,9 @@ install:
 uninstall:
 	$(CMD_RM) --recursive --force $(DIR_BIN_INSTALL)/motor_control
 	$(CMD_RM) --recursive --force $(DIR_BIN_INSTALL)/$(MOD_NAME)
-	$(CMD_RM) --force $(DIR_BIN_INSTALL)/$(TD_APP_NAME)
 	$(CMD_RM) --force $(DIR_BIN_INSTALL)/$(CGD_APP_NAME)
+	$(CMD_RM) --force $(DIR_BIN_INSTALL)/receiver.py
+	$(CMD_RM) --force $(DIR_BIN_INSTALL)/$(TD_APP_NAME)
 
 .PHONY: test
 test:
