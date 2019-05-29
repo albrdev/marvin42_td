@@ -14,8 +14,9 @@ CGD_CFG_NAME		:= $(CGD_APP_NAME)rc
 
 MOD_NAME			:= modules
 
-CMD_CP				:= cp -f
-CMD_RM				:= rm -f
+CMD_CP				:= cp
+CMD_RM				:= rm
+CMD_CHMOD			:= chmod
 CMD_PRINT			:= @printf
 
 .PHONY: install
@@ -27,6 +28,9 @@ install:
 	$(CMD_CP) --no-clobber $(DIR_CFG)/$(CGD_CFG_NAME) $(DIR_CFG_INSTALL)
 
 	$(CMD_CP) --recursive --no-target-directory --force $(DIR_SRC)/$(MOD_NAME) $(DIR_BIN_INSTALL)/$(MOD_NAME)
+
+	$(CMD_CHMOD) u+x,g+x $(DIR_BIN_INSTALL)/$(TD_APP_NAME)
+	$(CMD_CHMOD) u+x,g+x $(DIR_BIN_INSTALL)/$(CGD_APP_NAME)
 
 .PHONY: uninstall
 uninstall:
