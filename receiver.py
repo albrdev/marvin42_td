@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+"""
+@author: albrdev
+@email: albrdev@gmail.com
+@date: 2019-05-13
+"""
+
 import sys, os, argparse, configparser, struct, subprocess
 from modules.pathtools import *
 from modules.networking import PacketReceiver, PacketHeader

@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+"""
+@author: albrdev
+@email: albrdev@gmail.com
+@date: 2019-05-17
+"""
+
 import sys, time, math, argparse, configparser, signal, socket, struct
 from typing import TypeVar
 from ev3dev2.motor import LargeMotor, OUTPUT_A, OUTPUT_B
