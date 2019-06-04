@@ -122,7 +122,7 @@ class marvin42_cgd(Daemon):
                 self.send_packet_motorstop((config['remote']['bind_address'], int(config['remote']['bind_port'])))
                 return
 
-        time.sleep(0.25)
+        time.sleep(0.1)
 
 if __name__ == '__main__':
     global config
